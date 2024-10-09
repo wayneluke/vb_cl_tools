@@ -1,3 +1,5 @@
 
 .env
 .DS_Store
+checksum/config_generators.bak
+checksum/config_plants.bak
