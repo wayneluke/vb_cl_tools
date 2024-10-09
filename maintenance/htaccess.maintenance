@@ -1,0 +1,5 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Redirect all other requests to maintenance.html
+RewriteRule ^(.*)$ maintenance.html [L,QSA]
