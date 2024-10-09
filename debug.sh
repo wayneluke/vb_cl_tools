@@ -43,31 +43,26 @@ unset_env() {
   fi
 }
 
+# Example usage of the function:
+# Replace '/path/to/env/directory' with your desired directory
 source_env "."
 
-# Name of the backup directory
-backup_dir="$VB_DIRECTORY/_backup"
+# Specify the directory where the debug.lock file will be toggled
+LOCKFILE="$VB_DIRECTORY/debug.lock"
 
-# Create _backup directory if it does not exist
-if [ ! -d "$backup_dir" ]; then
-  mkdir "$backup_dir"
-  cp .htaccess "$backup_dir"
+# Check if the directory exists
+if [[ ! -d "$VB_DIRECTORY" ]]; then
+  echo "Error: Directory $VB_DIRECTORY does not exist."
+  exit 1
 fi
 
-# Name of the resulting compressed file
-output_file="${backup_dir}/file_backup_$(date +%Y%m%d_%H%M%S).tar.gz"
-
-# Compress the current directory tree, excluding the _backup directory
-tar --exclude="./${backup_dir}" -czf "$output_file" $VB_DIRECTORY
-
-# Check if the tar command was successful
-if [ $? -eq 0 ]; then
-  echo "Directory compressed successfully into: $output_file"
+# Toggle the existence of the debug.lock file
+if [[ -f "$LOCKFILE" ]]; then
+  echo "Removing debug.lock file."
+  rm "$LOCKFILE"
 else
-  echo "Error: Compression failed."
+  echo "Creating debug.lock file."
+  touch "$LOCKFILE"
 fi
-
-echo "Removing backups older than 15 days."
-find "$BACKUP_DIR" -type f -name "files_backup_*" -mtime +15 -exec rm {} \;
 
 unset_env "."

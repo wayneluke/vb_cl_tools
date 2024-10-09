@@ -44,8 +44,6 @@ unset_env() {
   fi
 }
 
-# Example usage of the function:
-# Replace '/path/to/env/directory' with your desired directory
 source_env "."
 
 # Variables
@@ -56,6 +54,7 @@ BACKUP_FILE="${DB_NAME}_${TIMESTAMP}.sql.tar.gz"
 # Create backup directory if it doesn't exist
 if [ ! -d "$BACKUP_DIR" ]; then
   mkdir -p "$BACKUP_DIR"
+  cp .htaccess "$BACKUP_DIR"
   echo "Backup directory '$BACKUP_DIR' created."
 fi
 
