@@ -18,7 +18,7 @@ Example Usage: `./backup.sh`
 - **backup.sh**: Creates a backup of your vBulletin files, compresses them with GZIP and places them in a _backup directory. If the directory doesn't exist, it will create the directory and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
 - **dbBackup.sh**: Creates a database backup and places it in the _backup directory. If the directory does not exist, it will create it and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
 - **buildChecksums.sh**: Will look for config_*.php files in the checksum subdirectory and process them to create md5 sum files as requested. This is handy if you upload additional smilies, ranks, or want the system to check your attachment directory for bad files.
-- 
+- **debug.sh**: Used in conjunction with the provided vBulletin Configuration files to toggle debug mode in vBulletin. This file will add or remove a debug.lock file to the vBulletin directory.
 - **upgrade.sh**: This script will upgrade your site. It does the following:
   - Copies /maintenance/maintenace.html to your vBulletin directory
   - Backs up your current .htaccess.
@@ -29,7 +29,9 @@ Example Usage: `./backup.sh`
 
 ## vBulletin Configuration
 
-I've included a set of vBulletin config.php files that includes changes to some variables in the system. These are located in the `config` directory. You can overwrite your existing files with them after updating with your database information.
+I've included a set of vBulletin config.php files that includes changes to the local PHP configuration. These are located in the `config` directory. You can overwrite your existing files with them after updating with your database information.
+
+> In order to use these files, there should be no disabled functions within PHP.
 
 - vBulletin will look for a file named debug.lock to enable or disable Debug Mode.
 - Turns off Display Errors in PHP.
@@ -40,9 +42,10 @@ I've included a set of vBulletin config.php files that includes changes to some 
 
 ## My Setup
 
-My current setup is:
+These scripts are developed and tested on the following platform.
 
-- Operating System: MacOS 15
+- Operating System: macOS 15
+- Package Manager: Homebrew 4.4.0
 - Primary Shell: ZSH 5.9
 - bash Shell: 3.2.57
 - Apache 2.4.62

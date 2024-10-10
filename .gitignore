@@ -1,5 +1,7 @@
 
 .env
 .DS_Store
+in_progress/
 checksum/config_generators.bak
 checksum/config_plants.bak
+devnotes.md
