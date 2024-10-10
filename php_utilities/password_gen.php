@@ -10,6 +10,7 @@
 //
 // Note: the $add_dashes option will increase the length of the password by
 // floor(sqrt(N)) characters.
+// https://gist.github.com/tylerhall/521810
 
 function generateStrongPassword($length = 9, $add_dashes = false, $available_sets = 'luds')
 {
