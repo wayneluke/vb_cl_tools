@@ -2,7 +2,7 @@
 
 This is a series of command line tools that I have created over the years to help manage vBulletin on my local machine. All of these were developed and tested on macOS. While ZSH is my primary shell, these use the BASH processor.
 
-These scripts are vBulletin version agnostic. They should operate with any version but are geared towards vB5 and vB6.
+> Note: While these scripts are not tied to a specific vBulletin version, they are intended to work with vBulletin 6 and higher. I do not know how they will work with older versions.
 
 ## Setup
 
@@ -10,22 +10,50 @@ These scripts are vBulletin version agnostic. They should operate with any versi
 2. Rename the `env.sample` file to `.env`.
 3. Edit the `.env` file and update the variables.
 4. Copy or Upload the contents of the archive to your server. They do not need to be placed in the vBulletin directory.
+5. Run the following command: `chmod +x *.sh`
 
 ## The Tools
 
 Example Usage: `./backup.sh`
 
-- **backup.sh**: Creates a backup of your vBulletin files, compresses them with GZIP and places them in a _backup directory. If the directory doesn't exist, it will create the directory and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
-- **dbBackup.sh**: Creates a database backup and places it in the _backup directory. If the directory does not exist, it will create it and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
-- **buildChecksums.sh**: Will look for config_*.php files in the checksum subdirectory and process them to create md5 sum files as requested. This is handy if you upload additional smilies, ranks, or want the system to check your attachment directory for bad files.
-- **debug.sh**: Used in conjunction with the provided vBulletin Configuration files to toggle debug mode in vBulletin. This file will add or remove a debug.lock file to the vBulletin directory.
-- **upgrade.sh**: This script will upgrade your site. It does the following:
-  - Copies /maintenance/maintenace.html to your vBulletin directory
-  - Backs up your current .htaccess.
-  - Replaces your .htaccess with a global redirect to maintenance.html
-  - Calls dbBackup.php
-  - Runs the vBulletin upgrade scripts
-  - Removes maintenance mode by restoring your default .htaccess.
+### backup.sh
+
+ Creates a backup of your vBulletin files, compresses them with GZIP and places them in a _backup directory. If the directory doesn't exist, it will create the directory and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
+
+**Usage:**  `./backup.sh`
+
+### dbBackup.sh
+
+Creates a database backup and places it in the _backup directory. If the directory does not exist, it will create it and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
+
+**Usage:** `./backup.sh`
+
+### buildChecksums.sh
+
+Will look for config_*.php files in the checksum subdirectory and process them to create md5 sum files as requested. This is handy if you upload additional smilies, ranks, or want the system to check your attachment directory for bad files.
+
+**Usage:**
+
+- Copy vB5checksum.phar from /do_not_upload/checksum to this directory.
+- Update your config_XX.php files to include the files you want checked by the diagnotics. You can use on of the included example files or the one in the do_not_upload/checksums directory for reference.
+- Run the command with `./buildChecksums.sh`
+
+### debug.sh
+
+Used in conjunction with the provided vBulletin Configuration files to toggle debug mode in vBulletin. This file will add or remove a debug.lock file to the vBulletin directory.
+
+**Usage:** `.\debug.sh`
+
+### upgrade.sh
+
+This script will upgrade your site. It does the following:
+
+- Copies /maintenance/maintenace.html to your vBulletin directory
+- Backs up your current .htaccess.
+- Replaces your .htaccess with a global redirect to maintenance.html
+- Calls dbBackup.php
+- Runs the vBulletin upgrade scripts
+- Removes maintenance mode by restoring your default .htaccess.
 
 ## vBulletin Configuration
 

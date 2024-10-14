@@ -6,3 +6,5 @@ checksum/config_generators.bak
 checksum/config_plants.bak
 devnotes.md
 vB5Checksum.phar
+checksum/config_generators.php
+checksum/config_plants.php
