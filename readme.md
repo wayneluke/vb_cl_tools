@@ -14,19 +14,11 @@ This is a series of command line tools that I have created over the years to hel
 
 ## The Tools
 
-Example Usage: `./backup.sh`
-
 ### backup.sh
 
  Creates a backup of your vBulletin files, compresses them with GZIP and places them in a _backup directory. If the directory doesn't exist, it will create the directory and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
 
 **Usage:**  `./backup.sh`
-
-### dbBackup.sh
-
-Creates a database backup and places it in the _backup directory. If the directory does not exist, it will create it and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
-
-**Usage:** `./backup.sh`
 
 ### buildChecksums.sh
 
@@ -37,6 +29,24 @@ Will look for config_*.php files in the checksum subdirectory and process them t
 - Copy vB5checksum.phar from /do_not_upload/checksum to this directory.
 - Update your config_XX.php files to include the files you want checked by the diagnotics. You can use on of the included example files or the one in the do_not_upload/checksums directory for reference.
 - Run the command with `./buildChecksums.sh`
+
+### compress.sh
+
+Compresses the specified directory into a tar.gz file.
+
+**Usage:** `./compress.sh <dirname>`
+
+### dbBackup.sh
+
+Creates a database backup and places it in the _backup directory. If the directory does not exist, it will create it and copy an .htaccess file to prohibit browsing. Backups will be timestamped and will not overwrite the old files. Automatically deletes backups older than 15 days.
+
+**Usage:** `./dbBackup.sh`
+
+### dBClone.sh
+
+Creates a copy of the specified database in the target database. There must be enough space on the partition to create a temporary backup of the source database. When the clone runs, it will verify if the database exists and ask if you wish to delete it before proceeding.
+
+**Usage:** `./dbClone.sh`
 
 ### debug.sh
 
@@ -54,6 +64,8 @@ This script will upgrade your site. It does the following:
 - Calls dbBackup.php
 - Runs the vBulletin upgrade scripts
 - Removes maintenance mode by restoring your default .htaccess.
+
+**Usage:** `./upgrade.sh`
 
 ## vBulletin Configuration
 
