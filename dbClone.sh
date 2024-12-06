@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Database credentials
-SOURCE_DB="source_database"      # Replace with the source database name
-TARGET_DB="target_database"      # Replace with the new database name
-DB_USER="your_username"          # Replace with your MySQL username
-DB_PASS="your_password"          # Replace with your MySQL password
-DB_HOST="localhost"              # Replace with your MySQL host (default is localhost)
-
 
 # Function to source .env file from a specific directory
 source_env() {
@@ -52,20 +45,52 @@ unset_env() {
 }
 
 source_env "."
+echo "If asked for a password, it is requesting the password for your database user."
+
+# Command to check if the targer database exists
+DB_EXISTS=$(mysql -u"$DB_USER" -p -h"$DB_HOST" -e "SHOW DATABASES LIKE '$TARGET_DB';" | grep "$TARGET_DB" | wc -l)
+
+if [ $DB_EXISTS -ne 0 ]; then
+    echo "Database '$TARGET_DB' exists."
+
+    # Prompt to delete the database
+    read -p "Do you want to delete the database '$TARGET_DB'? (y/n): " CONFIRM
+
+    if [[ $CONFIRM == "y" || $CONFIRM == "Y" ]]; then
+        mysql -u"$DB_USER" -p -h"$DB_HOST" -e "DROP DATABASE $TARGET_DB;"
+        if [ $? -eq 0 ]; then
+            echo "Database '$TARGET_DB' has been deleted."
+        else
+            echo "Failed to delete the database '$TARGET_DB'. Check your permissions."
+        fi
+    else
+        echo "Database '$TARGET_DB' was not deleted."
+        exit 0;
+    fi
+fi
+
 # Create the target database
 echo "Creating the target database..."
-mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE $TARGET_DB;"
+mysql -u"$DB_USER" -p -h"$DB_HOST" -e "CREATE DATABASE $TARGET_DB;"
 if [ $? -ne 0 ]; then
     echo "Failed to create target database $TARGET_DB. Exiting."
     exit 1
 fi
 
+echo "Backing up source database..."
+mysqldump -u"$DB_USER" -p -h"$DB_HOST" "$DB_NAME" > source_backup.sql
+if [ $? -ne 0 ]; then
+    echo "Failed to create backup"
+    exit 1
+fi
 # Dump the source database and import it into the target database
 echo "Duplicating the database..."
-mysqldump -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" "$SOURCE_DB" | mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" "$TARGET_DB"
+mysql -u"$DB_USER" -p -h"$DB_HOST" "$TARGET_DB" < source_backup.sql
 if [ $? -ne 0 ]; then
     echo "Failed to duplicate the database. Exiting."
     exit 1
 fi
+
+rm -f source_backup.sql
 
 echo "Database $SOURCE_DB successfully duplicated to $TARGET_DB."
