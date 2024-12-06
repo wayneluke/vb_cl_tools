@@ -60,8 +60,8 @@ fi
 
 # Perform the MySQL dump
 echo "Starting backup of database '$DB_NAME'..."
-#mysqldump -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_DIR/$SQL_FILE"
-mysqldump -u "$DB_USER" "$DB_NAME" > "$BACKUP_DIR/$SQL_FILE"
+
+mysqldump -u "$DB_USER" -p -d "$DB_NAME"> "$BACKUP_DIR/$SQL_FILE"
 
 # Check if the mysqldump was successful
 if [ $? -eq 0 ]; then
